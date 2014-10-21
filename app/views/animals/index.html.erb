@@ -1,0 +1,42 @@
+<h1>Animals#index</h1>
+<% unless @animals.empty? %>
+<table> 
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Race</th>
+      <th>Age</th>
+      <th>Tribe</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+    <tbody>
+      <% @animals.each do |animal|%>
+        <tr>
+          <td><%= animal.name %></td>
+          <td><%= animal.race %></td>
+          <td><%= animal.age  %></td>
+          <td><%= animal.tribe.name%></td>
+          <td><%= link_to "Show", sti_animal_path(animal.race, animal)%></td>
+          <td><%= link_to "Edit", sti_animal_path(animal.race, animal, "edit")%></td>
+          <td><%= link_to "Delete", sti_animal_path(animal.race, animal),
+           method: :delete, data:{ confirm: 'Are you sure?'}%></td>
+        </tr>
+      <% end %>
+    </tbody>
+</table>
+<% @animals.map(&:race).uniq.each do |animals|%>
+<% unless request.path == sti_animal_path(animals)%>
+<p><%= link_to "See all #{animals}", sti_animal_path(animals)%></p>
+<% end %>
+<% end %>
+<% unless request.path == sti_animal_path || request.url == root_url%>
+<%= link_to "See all animals", sti_animal_path%>
+<% end %>
+<p><%= request.url.gsub("#{request.scheme}://#{request.host}:#{request.port}","")%></p>
+<p><%= request.referer%></p>
+<%= link_to "New #{@race.humanize.underscore}", sti_animal_path(@race,@animal, :new) %>
+<%= sti_animal_path(@race, nil, :new)%>
+<% end %>
